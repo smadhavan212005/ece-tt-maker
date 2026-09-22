@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Apply the stored light/dark preference before anything paints, so there is no flash. -->
+  <script>
+    (function () {
+      try {
+        var storedTheme = localStorage.getItem('ece_tt_theme');
+        document.documentElement.setAttribute('data-theme', storedTheme === 'dark' ? 'dark' : 'light');
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional Engineering Department Timetable Preparation and Automatic Generation System with Conflict-Free Scheduling">
+  <title>ECE Timetable Maker</title>
+  <link rel="icon" type="image/png" href="psgitech.png">
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+
+  <!-- Login screen styles (scoped here so css/style.css is left untouched) -->
+  <style>
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--background, #f8f8fb);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--surface, #fff);
+      border: 1px solid var(--border, #e3e3e8);
+      border-radius: var(--radius-lg, 14px);
+      box-shadow: var(--shadow-lg, 0 16px 32px -8px rgba(16, 24, 40, 0.18));
+      padding: 32px 28px;
+      text-align: center;
+    }
+    .login-logo {
+      height: 64px;
+      width: 64px;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+    .login-card h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary, #36457b);
+      margin-bottom: 4px;
+    }
+    .login-subtitle {
+      font-size: 12.5px;
+      color: var(--text-muted, #6b6f82);
+      margin-bottom: 22px;
+    }
+    .login-field {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+    .login-field label {
+      display: block;
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--secondary, #192f59);
+    }
+    .login-field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border, #e3e3e8);
+      border-radius: var(--radius-sm, 4px);
+      background: #fff;
+      color: var(--text, #181825);
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .login-field input:focus {
+      outline: none;
+      border-color: var(--primary-light, #3544ee);
+      box-shadow: 0 0 0 3px rgba(53, 68, 238, 0.15);
+    }
+    .login-error {
+      text-align: left;
+      font-size: 12.5px;
+      color: var(--danger, #d92d3a);
+      background: var(--danger-bg, #fef2f2);
+      border: 1px solid #fecaca;
+      border-radius: var(--radius-sm, 4px);
+      padding: 8px 12px;
+      margin-bottom: 16px;
+    }
+    .login-submit {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Screen (shown until valid credentials are entered) -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <img class="login-logo" src="psgitech.png" alt="PSG Institute of Technology and Applied Research logo">
+      <h1>PSG Institute of Technology and Applied Research</h1>
+      <p class="login-subtitle">ECE Timetable Maker</p>
+      <form id="login-form" autocomplete="off">
+        <div class="login-field">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" name="username" autocomplete="username" required>
+        </div>
+        <div class="login-field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" required>
+        </div>
+        <div id="login-error" class="login-error" style="display:none;"></div>
+        <button type="submit" class="btn btn-primary btn-lg login-submit">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App Shell (hidden until sign-in succeeds) -->
+  <div id="app-shell" style="display:none;">
+
+  <!-- App Header -->
+  <header class="app-header no-print">
+    <div class="header-strip">
+      <div class="header-strip-inner">
+        <span>Department of Electronics &amp; Communication Engineering</span>
+        <span class="strip-tag">Timetable Generator</span>
+      </div>
+    </div>
+
+    <div class="header-brand">
+      <img class="logo logo-left" src="psgitech.png" alt="PSG Institute of Technology and Applied Research logo">
+      <div class="brand-titles">
+        <h1>PSG Institute of Technology and Applied Research</h1>
+        <p class="brand-sub">An Autonomous Institution &bull; Approved by AICTE &bull; Affiliated to Anna University</p>
+      </div>
+    </div>
+
+    <div class="header-bar">
+      <!-- Step Navigation Bar -->
+      <nav class="nav-steps" aria-label="Workflow steps">
+        <button class="step-tab active" data-step="1">
+          <span class="step-num">1</span>
+          <span>Department Setup</span>
+        </button>
+        <button class="step-tab" data-step="2">
+          <span class="step-num">2</span>
+          <span>Classes &amp; Classrooms</span>
+        </button>
+        <button class="step-tab" data-step="3">
+          <span class="step-num">3</span>
+          <span>Select Class</span>
+        </button>
+        <button class="step-tab" data-step="4">
+          <span class="step-num">4</span>
+          <span>Class Configuration</span>
+        </button>
+        <button class="step-tab" data-step="5">
+          <span class="step-num">5</span>
+          <span>Generation &amp; Dashboard</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn btn-secondary btn-sm" id="header-btn-manage-subjects">Master Subjects</button>
+        <button class="btn btn-secondary btn-sm" id="header-btn-manage-faculty">Master Faculty</button>
+        <button class="btn btn-secondary btn-sm" id="header-btn-save-project">Save</button>
+        <button class="btn btn-secondary btn-sm" id="header-btn-load-project">Load</button>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Toggle dark mode">
+          <span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+          <span id="theme-toggle-label">Light Mode</span>
+        </button>
+        <input type="file" id="header-project-file-input" accept=".json" style="display:none;">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div id="step-content-area">
+      <!-- Steps rendered dynamically by UIController -->
+    </div>
+  </main>
+
+  </div>
+  <!-- /App Shell -->
+
+  <!-- Theme Toggle (light/dark mode, remembered in this browser) -->
+  <script src="js/theme.js"></script>
+
+  <!-- Login Gate (must load before the app scripts render anything) -->
+  <script src="js/auth.js"></script>
+
+  <!-- Script Modules (Client-side, Zero external backend) -->
+  <script src="js/data.js"></script>
+  <script src="js/class-parser.js"></script>
+  <script src="js/subject-manager.js"></script>
+  <script src="js/faculty-manager.js"></script>
+  <script src="js/classroom-manager.js"></script>
+  <script src="js/constraints.js"></script>
+  <script src="js/timetable-engine.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/optimizer.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
