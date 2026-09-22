@@ -1,6 +1,6 @@
 # Department Timetable Generator
 
-**Live app: https://smadhavan212005.github.io/ece-tt/**
+**Live app: https://smadhavan212005.github.io/ece-tt-maker/**
 
 A web tool for **PSG Institute of Technology and Applied Research** that builds conflict-free weekly timetables for engineering departments (ECE and VLSI, extensible to others). You describe your classes, subjects, faculty and rooms, and it generates class, faculty, classroom and laboratory timetables that you can fine-tune by hand, save, export and print.
 
@@ -96,7 +96,7 @@ Some department pages on psgitech.ac.in respond slowly or are temporarily down (
 **Tests fail**
 Run `python3 python/test_cases.py` from the repository root. Each failing test prints the reason. Make sure you are using Python 3.
 
-If none of this helps, open an issue at https://github.com/smadhavan212005/ece-tt/issues with what you did, what you expected, and any red console errors.
+If none of this helps, open an issue at https://github.com/smadhavan212005/ece-tt-maker/issues with what you did, what you expected, and any red console errors.
 
 ---
 
