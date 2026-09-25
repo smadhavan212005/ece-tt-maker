@@ -1420,9 +1420,9 @@
           <div>
             Designed and Developed for the Department of ECE.<br>
             Contributors:<br>
-            Developer - <a href="https://www.linkedin.com/in/s--madhavan/" target="_blank" rel="noopener noreferrer"><strong>Madhavan S (ECE '27)</strong></a><br>
+            Developer - <a href="https://smadhavan.me/" target="_blank" rel="noopener noreferrer"><strong>Madhavan S (ECE '27)</strong></a><br>
             Designer - <a href="https://www.linkedin.com/in/dharanikavaratharaj/" target="_blank" rel="noopener noreferrer"><strong>Dharanika V (ECE '27)</strong></a><br>
-            Developer - <a href="https://www.linkedin.com/in/risheekeshkg/" target="_blank" rel="noopener noreferrer"><strong>Risheekesh K G (AI&amp;DS '27)</strong></a>
+            Developer - <a href="https://risheekesh.me/" target="_blank" rel="noopener noreferrer"><strong>Risheekesh K G (AI&amp;DS '27)</strong></a>
           </div>
         </div>
       `;
